@@ -9,4 +9,16 @@ Jiangyi Lin modified the ERD as the professor instructed:
 
 Ni Ke modified the description as the professor instructed. Although its not asked to include, it can still be found in our milestone2 zip file or our github repo.
 
+Wandong Wu changed the logical based on ERD. 
+
+Jiangyi Lin changde the DDL based on ERD and logical.
+
+Ni Ke finished the whole DML.
+
+Ni ke finished tasks a-c, Wandong Wu finished tasks d-f, Jiangyi Lin finished g-h and 1 complex report.
+
+YinXiang Wang finished 4 complex report.
+
+And we reviewed all our works together to reduce mistake.
+
 It is a zip file now, sorry for the mistake in first milestone.
