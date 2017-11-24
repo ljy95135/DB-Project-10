@@ -68,7 +68,7 @@ CREATE TABLE Course (
   CID INT AUTO_INCREMENT,
   Name VARCHAR(100) NOT NULL,
   Description TEXT NOT NULL,
-  Icon BLOB NOT NULL,
+  Icon VARCHAR(50) NOT NULL, # address of the icon
   Date DATETIME NOT NULL,
   Cost INT NOT NULL,
   PrimaryTopic INT NOT NULL,
