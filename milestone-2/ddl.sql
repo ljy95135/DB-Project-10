@@ -1,3 +1,8 @@
+# author: Jiangyi Lin
+/*
+This DDL is for MySQL
+*/
+
 drop table QuizQuestion, Quiz, Post, Link, Downloadable,
 Contain, PlayList, LikeAnswer, Related, Answer, 
 Question, CompleteMaterial, CourseMaterial, Interested, Buy, 
