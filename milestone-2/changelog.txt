@@ -1,0 +1,12 @@
+Jiangyi Lin modified the ERD as the professor instructed:
+1. changed CourseMaterial as a strong entity
+2. added specification from User to Student
+3. added UID for User
+4. changed topic from attributes to entity
+5. added roles in admin's relation Grant
+6. changed # Like as the attribute of Question
+7. joined complete/buy of courses, because student can only finish the course after buy it, it gives a promise of not making a wrong situation of finish a not-buy course.
+
+Ni Ke modified the description as the professor instructed. Although its not asked to include, it can still be found in our milestone2 zip file or our github repo.
+
+It is a zip file now, sorry for the mistake in first milestone.
