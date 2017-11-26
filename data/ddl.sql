@@ -72,6 +72,8 @@ CREATE TABLE Course (
   Date DATETIME NOT NULL,
   Cost INT NOT NULL,
   PrimaryTopic INT NOT NULL,
+  EnrollNumber INT,
+  AvgRate INT,
   PRIMARY KEY (CID),
   FOREIGN KEY (PrimaryTopic) REFERENCES Topic(TID)
 );
