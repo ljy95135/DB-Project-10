@@ -37,6 +37,8 @@ INSERT INTO admin (UserID, GrantAdmin, GrantTime)
 VALUES (1, 1, NOW());
 
 -- faculty
+INSERT INTO faculty (UserID, Website, Affiliation, Title, GrantAdmin, GrantTime)
+VALUES (1, 'www.example1.com', 'Affilation1', 'Title1', 1, NOW());
 
 -- c)
 /*
@@ -66,3 +68,12 @@ WHERE c.CID IN (
 ORDER BY c.AvgRate DESC;
 
 -- Interested
+SELECT c.Name, t1.Name, t2.Name
+FROM ((Course c INNER JOIN SecondaryTopic st ON c.CID = st.CID)
+INNER JOIN Topic t1 ON t1.TID = st.TID)
+INNER JOIN Topic t2 ON t2.TID = c.PrimaryTopic
+WHERE c.CID IN (
+    SELECT CID
+    FROM Interested i
+    WHERE i.UserID = 1)
+ORDER BY c.AvgRate DESC;
