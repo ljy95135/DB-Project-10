@@ -9,14 +9,7 @@ UserID: The user who wants to enroll this course
 */
 
 INSERT INTO BuyCourse (UserID, CID, BuyTime, Code, IsComplete, CompleteTime, Rating, Comment) 
-VALUES ( 16, 
-         1, 
-		 '2017-04-15 08:00:00', 
-		 'djgen3j5', 
-		 0, 
-		 NULL, 
-		 NULL, 
-		 NULL);
+VALUES ( 16, 1, '2017-04-15 08:00:00', 'djgen3j5', 0, NULL, NULL, NULL);
 
 
 --e)
@@ -35,7 +28,7 @@ FROM CourseMaterial cm
 WHERE cm.CID = 7 AND cm.CMID
 IN (SELECT cpm.CMID FROM CompleteMaterial cpm
 WHERE cpm.UserID = 24)
-ORDER BY completed_CM
+ORDER BY cm.CMID
 
 --The course materials which have not been completed
 SELECT cm.CMID AS Incompleted_CM, cm.Name
@@ -43,7 +36,7 @@ FROM CourseMaterial cm
 WHERE cm.CID = 7 AND cm.CMID
 NOT IN (SELECT cpm.CMID FROM CompleteMaterial cpm
 WHERE cpm.UserID = 24)
-ORDER BY Incompleted_CM
+ORDER BY cm.CMID
 
 
 
@@ -58,9 +51,7 @@ CID: The CID which this course material belongs to
 
 --Mark course material as having been completed by a student
 INSERT INTO CompleteMaterial (CMID, UserID, CompleteTime)
-VALUES ( 30, 
-         24, 
-		 '2017-11-25 21:00:00');
+VALUES ( 30, 24, '2017-11-25 21:00:00');
 
 --count the number of completed course materials
 SELECT COUNT(cpm.CMID) AS numsOfcpm
