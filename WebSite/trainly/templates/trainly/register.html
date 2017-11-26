@@ -1,0 +1,6 @@
+<h1>Register Now!</h1>
+<form method='POST' action="{% url 'trainly:register' %}">
+    {% csrf_token %}
+    {{ uf.as_p }}
+    <input type="submit" value="Submit"/>
+</form>
