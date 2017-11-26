@@ -35,7 +35,7 @@ FROM CourseMaterial cm
 WHERE cm.CID = 7 AND cm.CMID
 IN (SELECT cpm.CMID FROM CompleteMaterial cpm
 WHERE cpm.UserID = 24)
-ORDER BY cm.CMID
+ORDER BY completed_CM
 
 --The course materials which have not been completed
 SELECT cm.CMID AS Incompleted_CM, cm.Name
@@ -43,7 +43,7 @@ FROM CourseMaterial cm
 WHERE cm.CID = 7 AND cm.CMID
 NOT IN (SELECT cpm.CMID FROM CompleteMaterial cpm
 WHERE cpm.UserID = 24)
-ORDER BY cm.CMID
+ORDER BY Incompleted_CM
 
 
 
