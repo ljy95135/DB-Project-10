@@ -13,9 +13,9 @@ Wandong Wu changed the logical based on ERD.
 
 Jiangyi Lin changde the DDL based on ERD and logical.
 
-Ni Ke finished the whole DML.
+Ni Ke finished the whole DML (a huge work, thank you Ni Ke!).
 
-Ni ke finished tasks a-c, Wandong Wu finished tasks d-f, Jiangyi Lin finished g-h and 1 complex report.
+Wandong Wu finished tasks d-f, Jiangyi Lin finished a-c and g-h and 1 complex report.
 
 YinXiang Wang finished 4 complex report.
 
