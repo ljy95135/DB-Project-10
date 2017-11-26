@@ -77,3 +77,13 @@ WHERE c.CID IN (
     FROM Interested i
     WHERE i.UserID = 1)
 ORDER BY c.AvgRate DESC;
+
+-- g)
+/*
+param:
+UserID : The user you want to check
+*/
+SELECT c.Name, bc.CompleTime
+FROM BuyCourse bc INNER JOIN Course c ON bc.CID = c.CID
+WHERE bc.IsComplete
+ORDER BY bc.CompleTime;
