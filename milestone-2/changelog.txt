@@ -15,10 +15,9 @@ Jiangyi Lin changde the DDL based on ERD and logical.
 
 Ni Ke finished the whole DML (a huge work, thank you Ni Ke!).
 
-Wandong Wu finished tasks d-f, Jiangyi Lin finished a-c and g-h and 1 complex report.
+When we did the task, we also found the mistakes in ddl and changed them.
 
-YinXiang Wang finished 4 complex report.
+Wandong Wu finished tasks d-f, Jiangyi Lin finished a-c and g-h and 1 complex report and YinXiang Wang finished 4 complex report.
 
-And we reviewed all our works together to reduce mistake.
 
 It is a zip file now, sorry for the mistake in first milestone.

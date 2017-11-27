@@ -1,4 +1,4 @@
--- author: Jiangyi Lin
+-- I will use Django in my application, and some information like UserID will not be necessary to provide
 
 -- a)
 /*
@@ -34,11 +34,11 @@ As an special example, the first User grant himself as the admin
 */
 -- admin
 INSERT INTO admin (UserID, GrantAdmin, GrantTime)
-VALUES (1, 1, NOW());
+VALUES (17, 1, NOW());
 
 -- faculty
 INSERT INTO faculty (UserID, Website, Affiliation, Title, GrantAdmin, GrantTime)
-VALUES (1, 'www.example1.com', 'Affilation1', 'Title1', 1, NOW());
+VALUES (17, 'www.example1.com', 'Affilation1', 'Title1', 1, NOW());
 
 -- c)
 /*
@@ -53,7 +53,7 @@ INNER JOIN Topic t2 ON t2.TID = c.PrimaryTopic
 WHERE c.CID IN (
     SELECT CID
     FROM BuyCourse bc
-    WHERE bc.UserID = 1)
+    WHERE bc.UserID = 16)
 ORDER BY c.AvgRate DESC;
 
 -- completed
@@ -64,7 +64,7 @@ INNER JOIN Topic t2 ON t2.TID = c.PrimaryTopic
 WHERE c.CID IN (
     SELECT CID
     FROM BuyCourse bc
-    WHERE bc.UserID = 1 AND bc.IsCompelete)
+    WHERE bc.UserID = 16 AND bc.IsComplete)
 ORDER BY c.AvgRate DESC;
 
 -- Interested
@@ -75,8 +75,64 @@ INNER JOIN Topic t2 ON t2.TID = c.PrimaryTopic
 WHERE c.CID IN (
     SELECT CID
     FROM Interested i
-    WHERE i.UserID = 1)
+    WHERE i.UserID = 16)
 ORDER BY c.AvgRate DESC;
+
+-- d)
+/*
+param:
+UserID: The user who wants to enroll this course
+*/
+INSERT INTO BuyCourse (UserID, CID, BuyTime, Code, IsComplete, CompleteTime, Rating, Comment) 
+VALUES ( 16, 1, '2017-04-15 08:00:00', 'djgen3j5', 0, NULL, 90, 'Good');
+
+-- e)
+/*
+param:
+UserID: The student who has enrolled this course
+CID: The CID of this course
+*/
+-- The course materials which have been completed
+SELECT cm.CMID AS completed_CM, cm.Name
+FROM CourseMaterial cm
+WHERE cm.CID = 7 AND cm.CMID
+IN (SELECT cpm.CMID FROM CompleteMaterial cpm
+WHERE cpm.UserID = 24)
+ORDER BY cm.CMID;
+
+-- The course materials which have not been completed
+SELECT cm.CMID AS Incompleted_CM, cm.Name
+FROM CourseMaterial cm
+WHERE cm.CID = 7 AND cm.CMID
+NOT IN (SELECT cpm.CMID FROM CompleteMaterial cpm
+WHERE cpm.UserID = 24)
+ORDER BY cm.CMID;
+
+-- f)
+/*
+param: 
+UserID: The student who has enrolled this course material
+CID: The CID which this course material belongs to
+*/
+-- Mark course material as having been completed by a student
+INSERT INTO CompleteMaterial (CMID, UserID, CompleteTime)
+VALUES ( 30, 24, '2017-11-25 21:00:00');
+
+-- count the number of completed course materials
+SELECT COUNT(cpm.CMID) AS numsOfcpm
+FROM (Course c INNER JOIN CourseMaterial cm ON c.CID = cm.CID)
+INNER JOIN CompleteMaterial cpm ON cm.CMID = cpm.CMID
+WHERE cpm.UserID = 24 AND c.CID = 7;
+
+-- count the number of total course materials
+SELECT COUNT(cm.CMID) AS numsOfcm
+FROM Course c INNER JOIN CourseMaterial cm ON c.CID = cm.CID
+WHERE c.CID = 7;
+
+-- if the two above results are equal, then update this course to be completed
+UPDATE BuyCourse
+SET IsComplete = 1, CompleteTime = '2017-11-25 21:00:00', Rating = 4, Comment = 'quite well'
+WHERE UserID = 24 AND CID = 7;
 
 -- g)
 /*
@@ -103,22 +159,3 @@ ORDER BY bc.CompleteTime;
 SELECT SUM(c.Cost)
 FROM BuyCourse bc INNER JOIN Course c ON bc.CID = c.CID
 WHERE bc.IsComplete AND bc.UserID = 16;
-
--- 1 complex report
-/*
-Find all faculties who teach at least more than 100 students course
-that are not free and have rate higher than 90 points.
-*/
-SELECT u.FirstName AS FirstName, u.LastName AS LastName
-FROM User u
-WHERE u.UserID IN(
-    SELECT DISTINCT(f.UserID)
-    FROM Faculty f INNER JOIN CreateCourse cc ON f.UserID = cc.UserID
-    WHERE cc.CID IN (
-        SELECT c.CID
-        FROM BuyCourse bc INNER JOIN Course c ON bc.CID = c.CID
-        WHERE c.Cost > 0 AND c.AvgRate > 90
-        GROUP BY c.CID
-        HAVING COUNT(*)>100
-))
-ORDER BY FirstName, LastName;

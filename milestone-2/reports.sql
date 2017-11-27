@@ -1,3 +1,24 @@
+-- 1 complex report
+/*
+Find all faculties who teach at least more than 100 students course
+that are not free and have rate higher than 90 points.
+
+Note: now we do not have a rating, so it's empty set.
+*/
+SELECT u.FirstName AS FirstName, u.LastName AS LastName
+FROM User u
+WHERE u.UserID IN(
+    SELECT DISTINCT(f.UserID)
+    FROM Faculty f INNER JOIN CreateCourse cc ON f.UserID = cc.UserID
+    WHERE cc.CID IN (
+        SELECT c.CID
+        FROM BuyCourse bc INNER JOIN Course c ON bc.CID = c.CID
+        WHERE c.Cost > 0 AND c.AvgRate > 90
+        GROUP BY c.CID
+        HAVING COUNT(*)> 100
+))
+ORDER BY FirstName, LastName;
+
 /*
 2
 Show all the questions that has likes from students and show the student ID and email of whom asked the question,as well as the total likes that a question has.
