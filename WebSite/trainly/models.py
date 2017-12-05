@@ -25,3 +25,6 @@ class User(models.Model):
     class Meta:
         managed = False
         db_table = 'user'
+
+    def __str__(self):
+        return str(self.userID) + ":" + self.email

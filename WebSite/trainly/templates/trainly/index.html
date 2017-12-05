@@ -1,8 +1,13 @@
 <h1>Welcome to Trainly.io!</h1>
 
+{% if name %}
+    Hello, {{ name }}
+{% endif %}
+
 <ul>
-    <li><a href="{% url 'trainly:register' %}">Log In</a></li>
+    <li><a href="{% url 'trainly:login' %}">Log In</a></li>
     <li><a href="{% url 'trainly:register' %}">Sign Up</a></li>
+    <li><a href="{% url 'trainly:logout' %}">Logout</a></li>
 </ul>
 
 <p style="color: orangered;font-size:20px">
