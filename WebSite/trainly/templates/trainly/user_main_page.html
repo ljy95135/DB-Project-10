@@ -1,0 +1,21 @@
+{% load static %}
+
+Hello, {{ first_name }} {{ last_name }}<br>
+<h2>Basic Information</h2>
+<img src="{% static 'trainly/default.png' %}" width="100"><br>
+<b>Email:</b> {{ email }}<br>
+<b>Country:</b> {{ country }} <b>City:</b> {{ city }} <br>
+<b>Street:</b> {{ street }}
+<b>PostalCode:</b> {{ postal_code }}
+
+{% if admin %}
+    <h2>Admin Site</h2>
+    <a href="{% url '' %}">Add a faculty</a>
+{% endif %}
+
+{% if faculty %}
+    <h2>Teacher Site</h2>
+    <b>affiliation:</b> {{ affiliation }}<br>
+    <b>website:</b> <a href="http://{{ website }}">{{ website }}</a><br>
+    <b>title:</b> {{ title }}<br>
+{% endif %}

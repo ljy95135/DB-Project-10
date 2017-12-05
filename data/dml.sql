@@ -1,5 +1,7 @@
+-- osd@tom.com's pw is 4MTGfwAhiDIE 
+
 INSERT INTO User VALUES
-(1,'osd@tom.com','Reginald','Hearst','4MTGfwAhiDIE','94563.jpg','USA','Denver','2744 Davis Lane','80202'),
+(1,'osd@tom.com','Reginald','Hearst','41d3b9edd498b6a66a0e951f25627825','94563.jpg','USA','Denver','2744 Davis Lane','80202'),
 (2,'ojjrsejal@eyou.com','Arno','Gus','9TNwD7zO8zXx','flower.jpg','USA','Johnston','2267 Melm Street','02919'),
 (3,'vahq@265.com','Bowen','Fast','WlTL9OiNC1NS','ravve.png','USA','Chicago','1890 Hill Croft Farm Road','95926'),
 (4,'qkodea@gmail.com','Martina','Turner','2f5hLUnU4EoE','54693.jpg','USA','Plainview','3817 Hilltop Drive','79072'),

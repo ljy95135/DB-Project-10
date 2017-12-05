@@ -1,8 +1,11 @@
+import hashlib
+
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
-from .models import User
+from .models import User, Admin, Faculty
 
 from django import forms
 
@@ -23,7 +26,10 @@ class LoginForm(forms.Form):
     pw = forms.CharField(label='Password', widget=forms.PasswordInput())
 
 
-# TODO add check input
+class AddFacultyForm(forms.Form):
+    email = forms.EmailField(label='Email')
+
+
 def register(request):
     name = request.COOKIES.get("firstName", '')
     if not name == '':
@@ -35,7 +41,13 @@ def register(request):
             user.email = uf.cleaned_data['email']
             user.firstName = uf.cleaned_data['firstName']
             user.lastName = uf.cleaned_data['lastName']
-            user.pw = uf.cleaned_data['pw']
+
+            after_salt = uf.cleaned_data['pw'] + user.email
+            after_salt.encode('utf-8')
+            md5 = hashlib.md5()
+            md5.update(after_salt)
+            user.pw = md5.hexdigest()
+
             user.profilePict = "default.jpg"
             user.country = uf.cleaned_data['country']
             user.city = uf.cleaned_data['city']
@@ -64,16 +76,18 @@ def login(request):
         uf = LoginForm(request.POST)
         if uf.is_valid():
             user_email = uf.cleaned_data['email']
-            user_pw = uf.cleaned_data['pw']
-            user = User.objects.filter(email__exact=user_email, pw__exact=user_pw)
+            after_salt = uf.cleaned_data['pw'] + user_email
+            m = hashlib.md5()
+            m.update(after_salt.encode('utf-8'))
+            user = User.objects.filter(email__exact=user_email, pw__exact=m.hexdigest())
             if user:
                 user = user[0]
-                # TODO go to main page
                 response = HttpResponseRedirect('/trainly/')
                 response.set_cookie('firstName', user.firstName, 3600)
+                response.set_cookie('user_id', user.userID, 3600)
                 return response
             else:
-                return HttpResponse("User not exist")
+                return HttpResponse("User not exists or Password is wrong")
     else:
         uf = LoginForm()
         return render(request, 'trainly/login.html', {'uf': uf})
@@ -84,10 +98,47 @@ def logout(request):
     response = HttpResponse('You have already logout')
     if name:
         response.delete_cookie('firstName')
+        response.delete_cookie('userID')
         return response
     else:
         return HttpResponse("Please login first")
 
-# TODO main page of the user
+
 def user_main_page(request):
-    pass
+    id = request.COOKIES.get('user_id', None)
+    if id:
+        id = int(id)
+        user = User.objects.get(pk=id)
+
+        context = {
+            'first_name': user.firstName,
+            'last_name': user.lastName,
+            'email': user.email,
+            'icon': user.profilePict,
+            'country': user.country,
+            'city': user.city,
+            'street': user.street,
+            'postal_code': user.postalCode
+        }
+        # if user is an admin
+        try:
+            admin = Admin.objects.get(pk=id)
+        except ObjectDoesNotExist:
+            context['admin'] = False
+        else:
+            context['admin'] = True
+
+        # if user is a teacher
+        try:
+            faculty = Faculty.objects.get(pk=id)
+        except ObjectDoesNotExist:
+            context['faculty'] = False
+        else:
+            context['faculty'] = True
+            context['affiliation'] = faculty.affiliation
+            context['website'] = faculty.website
+            context['title'] = faculty.title
+
+        return render(request, 'trainly/user_main_page.html', context)
+    else:
+        return HttpResponse("Please login first")

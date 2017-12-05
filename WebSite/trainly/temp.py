@@ -1,14 +1,7 @@
 from django.db import models
 
 
-class Admin(models.Model):
-    userid = models.IntegerField(db_column='UserID', primary_key=True)  # Field name made lowercase.
-    grantadmin = models.ForeignKey('self', models.DO_NOTHING, db_column='GrantAdmin')  # Field name made lowercase.
-    granttime = models.DateTimeField(db_column='GrantTime')  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'admin'
 
 
 class Adminposition(models.Model):
@@ -134,18 +127,7 @@ class Downloadable(models.Model):
         db_table = 'downloadable'
 
 
-class Faculty(models.Model):
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID',
-                               primary_key=True)  # Field name made lowercase.
-    website = models.CharField(db_column='Website', max_length=200)  # Field name made lowercase.
-    affiliation = models.CharField(db_column='Affiliation', max_length=50)  # Field name made lowercase.
-    title = models.CharField(db_column='Title', max_length=300)  # Field name made lowercase.
-    grantadmin = models.ForeignKey(Admin, models.DO_NOTHING, db_column='GrantAdmin')  # Field name made lowercase.
-    granttime = models.DateTimeField(db_column='GrantTime')  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'faculty'
 
 
 class Interested(models.Model):

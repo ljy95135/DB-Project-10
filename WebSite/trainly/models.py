@@ -11,16 +11,16 @@ from django.db import models
 
 
 class User(models.Model):
-    userID = models.AutoField(db_column='UserID', primary_key=True)  # Field name made lowercase.
-    email = models.CharField(db_column='Email', unique=True, max_length=100)  # Field name made lowercase.
-    firstName = models.CharField(db_column='FirstName', max_length=50)  # Field name made lowercase.
-    lastName = models.CharField(db_column='LastName', max_length=50)  # Field name made lowercase.
-    pw = models.CharField(db_column='PW', max_length=300)  # Field name made lowercase.
-    profilePict = models.CharField(db_column='ProfilePict', max_length=50)  # Field name made lowercase.
-    country = models.CharField(db_column='Country', max_length=50)  # Field name made lowercase.
-    city = models.CharField(db_column='City', max_length=50)  # Field name made lowercase.
-    street = models.CharField(db_column='Street', max_length=200)  # Field name made lowercase.
-    postalCode = models.CharField(db_column='PostalCode', max_length=20)  # Field name made lowercase.
+    userID = models.AutoField(db_column='UserID', primary_key=True)
+    email = models.CharField(db_column='Email', unique=True, max_length=100)
+    firstName = models.CharField(db_column='FirstName', max_length=50)
+    lastName = models.CharField(db_column='LastName', max_length=50)
+    pw = models.CharField(db_column='PW', max_length=300)
+    profilePict = models.CharField(db_column='ProfilePict', max_length=50)
+    country = models.CharField(db_column='Country', max_length=50)
+    city = models.CharField(db_column='City', max_length=50)
+    street = models.CharField(db_column='Street', max_length=200)
+    postalCode = models.CharField(db_column='PostalCode', max_length=20)
 
     class Meta:
         managed = False
@@ -28,3 +28,32 @@ class User(models.Model):
 
     def __str__(self):
         return str(self.userID) + ":" + self.email
+
+
+class Admin(models.Model):
+    userID = models.ForeignKey('User', db_column='UserID', primary_key=True)
+    grantAdmin = models.ForeignKey('self', models.DO_NOTHING, db_column='GrantAdmin')  # Field name made lowercase.
+    grantTime = models.DateTimeField(db_column='GrantTime')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'admin'
+
+    def __str__(self):
+        return self.userID.__str__()
+
+
+class Faculty(models.Model):
+    userID = models.ForeignKey('User', db_column='UserID', primary_key=True)
+    website = models.CharField(db_column='Website', max_length=200)  # Field name made lowercase.
+    affiliation = models.CharField(db_column='Affiliation', max_length=50)  # Field name made lowercase.
+    title = models.CharField(db_column='Title', max_length=300)  # Field name made lowercase.
+    grantAdmin = models.ForeignKey(Admin, models.DO_NOTHING, db_column='GrantAdmin')  # Field name made lowercase.
+    grantTime = models.DateTimeField(db_column='GrantTime')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'faculty'
+
+    def __str__(self):
+        return self.userID.__str__()
