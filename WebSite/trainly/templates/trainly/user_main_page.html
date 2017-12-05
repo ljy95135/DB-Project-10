@@ -10,7 +10,7 @@ Hello, {{ first_name }} {{ last_name }}<br>
 
 {% if admin %}
     <h2>Admin Site</h2>
-    <a href="{% url '' %}">Add a faculty</a>
+    <a href="{% url 'trainly:add_faculty' %}">Add a faculty</a>
 {% endif %}
 
 {% if faculty %}

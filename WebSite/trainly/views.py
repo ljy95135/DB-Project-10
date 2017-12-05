@@ -1,5 +1,5 @@
 import hashlib
-
+import datetime
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
@@ -28,6 +28,9 @@ class LoginForm(forms.Form):
 
 class AddFacultyForm(forms.Form):
     email = forms.EmailField(label='Email')
+    website = forms.CharField(label='Website', max_length=200)
+    affiliation = forms.CharField(label='Affiliation', max_length=50)
+    title = forms.CharField(label='Title', max_length=300)
 
 
 def register(request):
@@ -105,10 +108,10 @@ def logout(request):
 
 
 def user_main_page(request):
-    id = request.COOKIES.get('user_id', None)
-    if id:
-        id = int(id)
-        user = User.objects.get(pk=id)
+    user_id = request.COOKIES.get('user_id', None)
+    if user_id:
+        user_id = int(user_id)
+        user = User.objects.get(pk=user_id)
 
         context = {
             'first_name': user.firstName,
@@ -122,7 +125,7 @@ def user_main_page(request):
         }
         # if user is an admin
         try:
-            admin = Admin.objects.get(pk=id)
+            Admin.objects.get(pk=user_id)
         except ObjectDoesNotExist:
             context['admin'] = False
         else:
@@ -130,7 +133,7 @@ def user_main_page(request):
 
         # if user is a teacher
         try:
-            faculty = Faculty.objects.get(pk=id)
+            faculty = Faculty.objects.get(pk=user_id)
         except ObjectDoesNotExist:
             context['faculty'] = False
         else:
@@ -142,3 +145,42 @@ def user_main_page(request):
         return render(request, 'trainly/user_main_page.html', context)
     else:
         return HttpResponse("Please login first")
+
+
+def add_faculty(request):
+    admin_id = request.COOKIES.get('user_id', None)
+    if admin_id is None:
+        return HttpResponse("Please login first")
+
+    try:
+        admin = Admin.objects.get(pk=admin_id)
+    except Admin.DoesNotExist:
+        return HttpResponse("Only admin can access this page.")
+
+    if request.method == "POST":
+        uf = AddFacultyForm(request.POST)
+        if uf.is_valid():
+            user_email = uf.cleaned_data['email']
+            try:
+                user = User.objects.get(email=user_email)
+            except User.DoesNotExist:
+                return HttpResponse("User not exist")
+
+            try:
+                Faculty.objects.get(userID=user.userID)
+            except Faculty.DoesNotExist:
+                # TODO add faculty
+                faculty = Faculty()
+                faculty.userID = user
+                faculty.website = uf.cleaned_data['website']
+                faculty.affiliation = uf.cleaned_data['affiliation']
+                faculty.title = uf.cleaned_data['title']
+                faculty.grantAdmin = admin
+                faculty.grantTime = datetime.datetime.now()
+                faculty.save()
+                return HttpResponse("Done!")
+            else:
+                return HttpResponse("This user has been a faculty")
+    else:
+        uf = AddFacultyForm()
+        return render(request, 'trainly/add_faculty.html', {'uf': uf})

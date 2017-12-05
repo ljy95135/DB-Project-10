@@ -45,11 +45,11 @@ class Admin(models.Model):
 
 class Faculty(models.Model):
     userID = models.ForeignKey('User', db_column='UserID', primary_key=True)
-    website = models.CharField(db_column='Website', max_length=200)  # Field name made lowercase.
-    affiliation = models.CharField(db_column='Affiliation', max_length=50)  # Field name made lowercase.
-    title = models.CharField(db_column='Title', max_length=300)  # Field name made lowercase.
-    grantAdmin = models.ForeignKey(Admin, models.DO_NOTHING, db_column='GrantAdmin')  # Field name made lowercase.
-    grantTime = models.DateTimeField(db_column='GrantTime')  # Field name made lowercase.
+    website = models.CharField(db_column='Website', max_length=200)
+    affiliation = models.CharField(db_column='Affiliation', max_length=50)
+    title = models.CharField(db_column='Title', max_length=300)
+    grantAdmin = models.ForeignKey(Admin, models.DO_NOTHING, db_column='GrantAdmin')
+    grantTime = models.DateTimeField(db_column='GrantTime')
 
     class Meta:
         managed = False

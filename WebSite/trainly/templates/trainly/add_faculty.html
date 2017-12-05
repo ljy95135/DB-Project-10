@@ -1,5 +1,5 @@
-<h1>Welcome back!</h1>
-<form method='POST' action="{% url 'trainly:login' %}">
+<h1>Write faculty's Email</h1>
+<form method='POST' action="{% url 'trainly:add_faculty' %}">
     {% csrf_token %}
     {{ uf.as_p }}
     <input type="submit" value="Submit"/>
