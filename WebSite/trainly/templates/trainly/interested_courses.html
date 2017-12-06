@@ -2,7 +2,7 @@
 
     <ul>
         {% for course in courses %}
-            <li><a></a>{{ course.cid }}:{{ course.name }}</li>
+            <li><a href="{% url 'trainly:courses_page' course.cid%}">{{ course.cid }}:{{ course.name }}</a></li>
         {% endfor %}
     </ul>
 

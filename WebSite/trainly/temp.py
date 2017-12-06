@@ -1,3 +1,6 @@
+# generate by django
+# When use, move to model.py
+
 from django.db import models
 
 
@@ -24,16 +27,7 @@ class Answer(models.Model):
         unique_together = (('userid', 'qid'),)
 
 
-class Completematerial(models.Model):
-    cmid = models.ForeignKey('Coursematerial', models.DO_NOTHING, db_column='CMID',
-                             primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID')  # Field name made lowercase.
-    completetime = models.DateTimeField(db_column='CompleteTime')  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'completematerial'
-        unique_together = (('cmid', 'userid'),)
 
 
 class Contain(models.Model):
@@ -47,15 +41,7 @@ class Contain(models.Model):
         unique_together = (('userid', 'name', 'cmid'),)
 
 
-class Coursematerial(models.Model):
-    cmid = models.AutoField(db_column='CMID', primary_key=True)  # Field name made lowercase.
-    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID')  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'coursematerial'
-        unique_together = (('cmid', 'cid'),)
 
 
 class Createcourse(models.Model):

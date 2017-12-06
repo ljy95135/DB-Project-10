@@ -131,3 +131,29 @@ class Interested(models.Model):
         managed = False
         db_table = 'interested'
         unique_together = (('userID', 'cid'),)
+
+
+class Coursematerial(models.Model):
+    cmid = models.AutoField(db_column='CMID', primary_key=True)
+    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID')
+    name = models.CharField(db_column='Name', max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'coursematerial'
+        unique_together = (('cmid', 'cid'),)
+
+
+class CompleteMaterial(models.Model):
+    cmid = models.ForeignKey('Coursematerial', models.DO_NOTHING, db_column='CMID',
+                             primary_key=True)  # Field name made lowercase.
+    userID = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID')  # Field name made lowercase.
+    completeTime = models.DateTimeField(db_column='CompleteTime')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'completematerial'
+        unique_together = (('cmid', 'userID'),)
+
+    def __str__(self):
+        return self.cmid.name+" by "+self.userID.__str__()

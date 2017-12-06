@@ -8,7 +8,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
 
-from .models import User, Admin, Faculty, Course, BuyCourse, Interested
+from .models import User, Admin, Faculty, Course, BuyCourse, Interested, Secondarytopic, Coursematerial, \
+    CompleteMaterial
 
 from django import forms
 
@@ -230,6 +231,9 @@ def add_admin(request):
 
 def add_course(request, cid):
     user_id = request.COOKIES.get('user_id', None)
+    if user_id is None:
+        return HttpResponse("Please login first")
+
     user = User.objects.get(pk=user_id)
 
     try:
@@ -237,8 +241,6 @@ def add_course(request, cid):
     except Course.DoesNotExist:
         return HttpResponse("No such Course")
 
-    if user_id is None:
-        return HttpResponse("Please login first")
     try:
         BuyCourse.objects.get(userID=user, cid=course)
     except BuyCourse.DoesNotExist:
@@ -252,7 +254,7 @@ def add_course(request, cid):
         buy.code = code
         buy.isComplete = 0
         buy.rating = -1
-        buy.save()
+        buy.save(force_insert=True)
         return HttpResponse("Done!")
     else:
         return HttpResponse("You have already bought it!")
@@ -264,7 +266,10 @@ def enrolled_courses(request, uid):
     except User.DoesNotExist:
         return HttpResponse('No such User')
 
-    context = {'courses': BuyCourse.objects.filter(userID=user)}
+    courses = [bc.cid for bc in BuyCourse.objects.filter(userID=user)]
+    # no rates availabe now
+    # courses = sorted(courses, key=lambda x: x.avgRate)
+    context = {'courses': courses}
     return render(request, 'trainly/enrolled_courses.html', context)
 
 
@@ -273,8 +278,11 @@ def completed_courses(request, uid):
         user = User.objects.get(pk=uid)
     except User.DoesNotExist:
         return HttpResponse('No such User')
+    courses = [bc.cid for bc in BuyCourse.objects.filter(userID=user, isComplete=1)]
+    # no rates availabe now
+    # courses = sorted(courses, key=lambda x: x.avgRate)
+    context = {'courses': courses}
 
-    context = {'courses': BuyCourse.objects.filter(userID=user, isComplete=1)}
     return render(request, 'trainly/completed_courses.html', context)
 
 
@@ -283,8 +291,8 @@ def interested_courses(request, uid):
         user = User.objects.get(pk=uid)
     except User.DoesNotExist:
         return HttpResponse('No such User')
-
-    context = {'courses': Interested.objects.filter(userID=user)}
+    courses = [bc.cid for bc in Interested.objects.filter(userID=user)]
+    context = {'courses': courses}
     return render(request, 'trainly/interested_courses.html', context)
 
 
@@ -294,3 +302,78 @@ class CoursesView(generic.ListView):
 
     def get_queryset(self):
         return Course.objects.all()
+
+
+def course_page(request, cid):
+    # basic info section
+    try:
+        course = Course.objects.get(pk=cid)
+    except Course.DoesNotExist:
+        return HttpResponse("No such Course")
+
+    context = {"course": course}
+    topics = [t.tid.name for t in Secondarytopic.objects.filter(cid=course)]
+    context['topics'] = topics
+
+    user_id = request.COOKIES.get('user_id', None)
+
+    # If this is a user enrolled in the course
+    if user_id is None:
+        context['enrolled'] = False
+        return render(request, 'trainly/course.html', context)
+
+    user = User.objects.get(pk=user_id)
+    try:
+        BuyCourse.objects.get(userID=user, cid=course)
+    except BuyCourse.DoesNotExist:
+        context['enrolled'] = False
+        return render(request, 'trainly/course.html', context)
+    context['enrolled'] = True
+    course_materials = [cm for cm in Coursematerial.objects.filter(cid=course)]
+    context['course_materials'] = course_materials
+
+    return render(request, 'trainly/course.html', context)
+
+
+def learn_material(request, cmid):
+    user_id = request.COOKIES.get('user_id', None)
+    if user_id is None:
+        return HttpResponse("Please login first")
+    user = User.objects.get(pk=user_id)
+
+    try:
+        course_material = Coursematerial.objects.get(pk=cmid)
+    except Coursematerial.DoesNotExist:
+        return HttpResponse("No such Material")
+
+    try:
+        bc = BuyCourse.objects.get(userID=user, cid=course_material.cid)
+    except BuyCourse.DoesNotExist:
+        return HttpResponse("You must buy this course first!")
+
+    # Complete material
+    try:
+        CompleteMaterial.objects.get(userID=user, cmid=course_material)
+    except CompleteMaterial.DoesNotExist:
+        pass
+    else:
+        return HttpResponse("You learn it again, good!")
+    cm = CompleteMaterial()
+    cm.userID = user
+    cm.cmid = course_material
+    cm.completeTime = datetime.datetime.now()
+    cm.save()
+
+    # Maybe it will finish the course
+    try:
+        for material in Coursematerial.objects.filter(cid=course_material.cid):
+            CompleteMaterial.objects.get(userID=user, cmid=material)
+    except CompleteMaterial.DoesNotExist:
+        return HttpResponse("You learn the material, you can still learn this course!")
+    else:
+        bc.isComplete = 1
+        bc.completeTime = datetime.datetime.now()
+        bc.save(update_fields=('isComplete', 'completeTime'))
+        return HttpResponse("You learn the material, you also finish the course!")
+
+# TODO one finish can get a certification

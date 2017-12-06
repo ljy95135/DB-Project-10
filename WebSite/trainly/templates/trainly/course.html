@@ -1,0 +1,24 @@
+<p>{{ course.cid }}:{{ course.name }}</p>
+<p>{{ course.description }}</p>
+<p>Price: {{ course.cost }}</p>
+<p>Main Topic: {{ course.primaryTopic }}</p>
+<p>Secondary Topic:</p>
+{% for topic in topics %}
+    {{ topic }} ;
+{% endfor %}
+
+{% if course.avgRate %}
+    <p>Average Rate: {{ course.avgRate }}</p>
+{% endif %}
+
+{% if enrolled %}
+    {% if course_materials %}
+        <h2>Materials</h2>
+        {% for cm in course_materials %}
+            <li>{{ cm.name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'trainly:learn_material' cm.cmid%}">Learn the material!</a></li>
+        {% endfor %}
+    {% else %}
+        <p>No material.</p>
+    {% endif %}
+{% endif %}
