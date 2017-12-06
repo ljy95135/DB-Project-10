@@ -1,0 +1,7 @@
+<ul>
+    {% for course in courses %}
+        <li><a></a>{{ course.cid }}:{{ course.name }} <a href="{% url 'trainly:add_course' course.cid%} ">Add
+            this
+            Course!</a></li>
+    {% endfor %}
+</ul>

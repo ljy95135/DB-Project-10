@@ -1,9 +1,6 @@
 from django.db import models
 
 
-
-
-
 class Adminposition(models.Model):
     userid = models.ForeignKey(Admin, models.DO_NOTHING, db_column='UserID',
                                primary_key=True)  # Field name made lowercase.
@@ -27,21 +24,9 @@ class Answer(models.Model):
         unique_together = (('userid', 'qid'),)
 
 
-class Buycourse(models.Model):
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID',
-                               primary_key=True)  # Field name made lowercase.
-    cid = models.ForeignKey('Course', models.DO_NOTHING, db_column='CID')  # Field name made lowercase.
-    buytime = models.DateTimeField(db_column='BuyTime')  # Field name made lowercase.
-    code = models.CharField(db_column='Code', max_length=100)  # Field name made lowercase.
-    iscomplete = models.IntegerField(db_column='IsComplete')  # Field name made lowercase.
-    completetime = models.DateTimeField(db_column='CompleteTime')  # Field name made lowercase.
-    rating = models.IntegerField(db_column='Rating')  # Field name made lowercase.
-    comment = models.TextField(db_column='Comment')  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = 'buycourse'
-        unique_together = (('userid', 'cid'),)
+
+
 
 
 class Completematerial(models.Model):
@@ -65,22 +50,6 @@ class Contain(models.Model):
         managed = False
         db_table = 'contain'
         unique_together = (('userid', 'name', 'cmid'),)
-
-
-class Course(models.Model):
-    cid = models.AutoField(db_column='CID', primary_key=True)  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
-    description = models.TextField(db_column='Description')  # Field name made lowercase.
-    icon = models.TextField(db_column='Icon')  # Field name made lowercase.
-    date = models.DateTimeField(db_column='Date')  # Field name made lowercase.
-    cost = models.IntegerField(db_column='Cost')  # Field name made lowercase.
-    primarytopic = models.ForeignKey('Topic', models.DO_NOTHING, db_column='PrimaryTopic')  # Field name made lowercase.
-    enrollnumber = models.IntegerField(db_column='EnrollNumber', blank=True, null=True)  # Field name made lowercase.
-    avgrate = models.IntegerField(db_column='AvgRate', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'course'
 
 
 class Coursematerial(models.Model):
@@ -125,9 +94,6 @@ class Downloadable(models.Model):
     class Meta:
         managed = False
         db_table = 'downloadable'
-
-
-
 
 
 class Interested(models.Model):
@@ -243,22 +209,7 @@ class Related(models.Model):
         unique_together = (('qid', 'cmid'),)
 
 
-class Secondarytopic(models.Model):
-    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID', primary_key=True)  # Field name made lowercase.
-    tid = models.ForeignKey('Topic', models.DO_NOTHING, db_column='TID')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'secondarytopic'
-        unique_together = (('cid', 'tid'),)
 
 
-class Topic(models.Model):
-    tid = models.AutoField(db_column='TID', primary_key=True)  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=100)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'topic'
 
 

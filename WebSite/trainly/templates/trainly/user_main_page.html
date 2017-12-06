@@ -6,11 +6,14 @@ Hello, {{ first_name }} {{ last_name }}<br>
 <b>Email:</b> {{ email }}<br>
 <b>Country:</b> {{ country }} <b>City:</b> {{ city }} <br>
 <b>Street:</b> {{ street }}
-<b>PostalCode:</b> {{ postal_code }}
+<b>PostalCode:</b> {{ postal_code }}<br>
+
+<a href="{% url 'trainly:courses' %}">See All Courses</a>
 
 {% if admin %}
     <h2>Admin Site</h2>
-    <a href="{% url 'trainly:add_faculty' %}">Add a faculty</a>
+    <a href="{% url 'trainly:add_faculty' %}">Add a faculty</a><br>
+    <a href="{% url 'trainly:add_admin' %}">Add a fellow admin</a>
 {% endif %}
 
 {% if faculty %}

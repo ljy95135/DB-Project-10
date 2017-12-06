@@ -13,4 +13,7 @@ urlpatterns = \
         url(r'^logout/$', views.logout, name='logout'),
         url(r'^main/$', views.user_main_page, name='main'),
         url(r'^add_faculty/$', views.add_faculty, name='add_faculty'),
+        url(r'^add_admin/$', views.add_admin, name='add_admin'),
+        url(r'^courses/$', views.CoursesView.as_view(), name='courses'),
+        url(r'^add_course/(?P<cid>[0-9]+)$', views.add_course, name='add_course'),
     ]

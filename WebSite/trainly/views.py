@@ -4,8 +4,9 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.views import generic
 
-from .models import User, Admin, Faculty
+from .models import User, Admin, Faculty, Course, BuyCourse
 
 from django import forms
 
@@ -31,6 +32,10 @@ class AddFacultyForm(forms.Form):
     website = forms.CharField(label='Website', max_length=200)
     affiliation = forms.CharField(label='Affiliation', max_length=50)
     title = forms.CharField(label='Title', max_length=300)
+
+
+class AddAdminForm(forms.Form):
+    email = forms.EmailField(label='Email')
 
 
 def register(request):
@@ -169,7 +174,6 @@ def add_faculty(request):
             try:
                 Faculty.objects.get(userID=user.userID)
             except Faculty.DoesNotExist:
-                # TODO add faculty
                 faculty = Faculty()
                 faculty.userID = user
                 faculty.website = uf.cleaned_data['website']
@@ -184,3 +188,68 @@ def add_faculty(request):
     else:
         uf = AddFacultyForm()
         return render(request, 'trainly/add_faculty.html', {'uf': uf})
+
+
+def add_admin(request):
+    admin_id = request.COOKIES.get('user_id', None)
+    if admin_id is None:
+        return HttpResponse("Please login first")
+
+    try:
+        admin = Admin.objects.get(pk=admin_id)
+    except Admin.DoesNotExist:
+        return HttpResponse("Only admin can access this page.")
+
+    if request.method == "POST":
+        uf = AddAdminForm(request.POST)
+        if uf.is_valid():
+            new_user = uf.cleaned_data['email']
+            try:
+                new_admin_user = User.objects.get(email=new_user)
+            except User.DoesNotExist:
+                return HttpResponse("User not exist")
+
+            try:
+                Admin.objects.get(userID=new_admin_user.userID)
+            except Admin.DoesNotExist:
+                new_admin = Admin()
+                new_admin.userID = new_admin_user
+                new_admin.grantAdmin = admin
+                new_admin.grantTime = datetime.datetime.now()
+                new_admin.save()
+                return HttpResponse("Done!")
+            else:
+                return HttpResponse("This user has been a Admin")
+    else:
+        uf = AddAdminForm()
+        return render(request, 'trainly/add_admin.html', {'uf': uf})
+
+
+def add_course(request, cid):
+    user_id = request.COOKIES.get('user_id', None)
+    user = User.objects.get(pk=user_id)
+
+    try:
+        course = Course.objects.get(pk=cid)
+    except Course.DoesNotExist:
+        return HttpResponse("No such Course")
+
+    if user_id is None:
+        return HttpResponse("Please login first")
+    try:
+        BuyCourse.objects.get(userID=user, cid=course)
+    except BuyCourse.DoesNotExist:
+        # TODO add course to DB
+        return HttpResponse("Wait")
+    else:
+        return HttpResponse("You have already bought it!")
+
+
+# TODO add course info and compelete
+
+class CoursesView(generic.ListView):
+    template_name = 'trainly/courses.html'
+    context_object_name = 'courses'
+
+    def get_queryset(self):
+        return Course.objects.all()

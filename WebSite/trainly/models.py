@@ -32,8 +32,8 @@ class User(models.Model):
 
 class Admin(models.Model):
     userID = models.ForeignKey('User', db_column='UserID', primary_key=True)
-    grantAdmin = models.ForeignKey('self', models.DO_NOTHING, db_column='GrantAdmin')  # Field name made lowercase.
-    grantTime = models.DateTimeField(db_column='GrantTime')  # Field name made lowercase.
+    grantAdmin = models.ForeignKey('self', models.DO_NOTHING, db_column='GrantAdmin')
+    grantTime = models.DateTimeField(db_column='GrantTime')
 
     class Meta:
         managed = False
@@ -57,3 +57,67 @@ class Faculty(models.Model):
 
     def __str__(self):
         return self.userID.__str__()
+
+
+class Course(models.Model):
+    cid = models.AutoField(db_column='CID', primary_key=True)
+    name = models.CharField(db_column='Name', max_length=100)
+    description = models.TextField(db_column='Description')
+    icon = models.TextField(db_column='Icon')
+    date = models.DateTimeField(db_column='Date')
+    cost = models.IntegerField(db_column='Cost')
+    primaryTopic = models.ForeignKey('Topic', models.DO_NOTHING, db_column='PrimaryTopic')
+    enrollNumber = models.IntegerField(db_column='EnrollNumber', blank=True, null=True)
+    avgRate = models.IntegerField(db_column='AvgRate', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'course'
+
+    def __str__(self):
+        return str(self.cid) + ":" + self.name
+
+
+class Topic(models.Model):
+    tid = models.AutoField(db_column='TID', primary_key=True)
+    name = models.CharField(db_column='Name', max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'topic'
+
+    def __str__(self):
+        return self.name
+
+
+class Secondarytopic(models.Model):
+    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID', primary_key=True)  # Field name made lowercase.
+    tid = models.ForeignKey('Topic', models.DO_NOTHING, db_column='TID')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'secondarytopic'
+        unique_together = (('cid', 'tid'),)
+
+    def __str__(self):
+        return self.cid.__str__() + ':' + self.tid.__str__()
+
+
+class BuyCourse(models.Model):
+    userID = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID',
+                               primary_key=True)
+    cid = models.ForeignKey('Course', models.DO_NOTHING, db_column='CID')
+    buyTime = models.DateTimeField(db_column='BuyTime')
+    code = models.CharField(db_column='Code', max_length=100)
+    isComplete = models.IntegerField(db_column='IsComplete')
+    completeTime = models.DateTimeField(db_column='CompleteTime')
+    rating = models.IntegerField(db_column='Rating')
+    comment = models.TextField(db_column='Comment')
+
+    class Meta:
+        managed = False
+        db_table = 'buycourse'
+        unique_together = (('userID', 'cid'),)
+
+    def __str__(self):
+        return self.userID.email+':'+self.cid.name
