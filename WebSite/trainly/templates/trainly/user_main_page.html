@@ -8,7 +8,11 @@ Hello, {{ first_name }} {{ last_name }}<br>
 <b>Street:</b> {{ street }}
 <b>PostalCode:</b> {{ postal_code }}<br>
 
-<a href="{% url 'trainly:courses' %}">See All Courses</a>
+<a href="{% url 'trainly:courses' %}">See All Courses</a><br>
+
+<a href="{% url 'trainly:enrolled_courses' uid%}">Enrolled Courses</a><br>
+<a href="{% url 'trainly:completed_courses' uid %}">Completed Courses</a><br>
+<a href="{% url 'trainly:interested_courses' uid%}">Interested Courses</a><br>
 
 {% if admin %}
     <h2>Admin Site</h2>

@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views import generic
 
-from .models import User, Admin, Faculty, Course, BuyCourse
+from .models import User, Admin, Faculty, Course, BuyCourse, Interested
 
 from django import forms
 
@@ -121,6 +121,7 @@ def user_main_page(request):
         user = User.objects.get(pk=user_id)
 
         context = {
+            'uid': user_id,
             'first_name': user.firstName,
             'last_name': user.lastName,
             'email': user.email,
@@ -242,12 +243,12 @@ def add_course(request, cid):
         BuyCourse.objects.get(userID=user, cid=course)
     except BuyCourse.DoesNotExist:
         buy = BuyCourse()
-        buy.userID=user
-        buy.cid=course
+        buy.userID = user
+        buy.cid = course
         buy.buyTime = datetime.datetime.now()
         # code is year+month+date+time+random number
         code = buy.buyTime.strftime('%Y%m%d%H%m')
-        code += str(random.randint(100000,999999))
+        code += str(random.randint(100000, 999999))
         buy.code = code
         buy.isComplete = 0
         buy.rating = -1
@@ -257,7 +258,35 @@ def add_course(request, cid):
         return HttpResponse("You have already bought it!")
 
 
-# TODO add course info and compelete
+def enrolled_courses(request, uid):
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return HttpResponse('No such User')
+
+    context = {'courses': BuyCourse.objects.filter(userID=user)}
+    return render(request, 'trainly/enrolled_courses.html', context)
+
+
+def completed_courses(request, uid):
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return HttpResponse('No such User')
+
+    context = {'courses': BuyCourse.objects.filter(userID=user, isComplete=1)}
+    return render(request, 'trainly/completed_courses.html', context)
+
+
+def interested_courses(request, uid):
+    try:
+        user = User.objects.get(pk=uid)
+    except User.DoesNotExist:
+        return HttpResponse('No such User')
+
+    context = {'courses': Interested.objects.filter(userID=user)}
+    return render(request, 'trainly/interested_courses.html', context)
+
 
 class CoursesView(generic.ListView):
     template_name = 'trainly/courses.html'

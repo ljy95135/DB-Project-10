@@ -363,6 +363,9 @@ INSERT INTO BuyCourse VALUES
 (50,1,'2017-05-10 16:42:38','u81luplq',1,'2017-09-30 23:59:59',3,'medium well');
 
 INSERT INTO Interested VALUES
+(1,1),
+(1,2),
+(1,3),
 (16,3),
 (16,11),
 (16,20),

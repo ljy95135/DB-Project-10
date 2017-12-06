@@ -1,0 +1,11 @@
+{% if courses %}
+
+    <ul>
+        {% for course in courses %}
+            <li><a></a>{{ course.cid }}:{{ course.name }} Get Your certification.</li>
+        {% endfor %}
+    </ul>
+
+{% else %}
+    <p>For this user, no Courses are completed.</p>
+{% endif %}

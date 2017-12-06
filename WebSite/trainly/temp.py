@@ -24,11 +24,6 @@ class Answer(models.Model):
         unique_together = (('userid', 'qid'),)
 
 
-
-
-
-
-
 class Completematerial(models.Model):
     cmid = models.ForeignKey('Coursematerial', models.DO_NOTHING, db_column='CMID',
                              primary_key=True)  # Field name made lowercase.
@@ -94,17 +89,6 @@ class Downloadable(models.Model):
     class Meta:
         managed = False
         db_table = 'downloadable'
-
-
-class Interested(models.Model):
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID',
-                               primary_key=True)  # Field name made lowercase.
-    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'interested'
-        unique_together = (('userid', 'cid'),)
 
 
 class Likequestion(models.Model):
@@ -207,9 +191,3 @@ class Related(models.Model):
         managed = False
         db_table = 'related'
         unique_together = (('qid', 'cmid'),)
-
-
-
-
-
-

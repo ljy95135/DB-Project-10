@@ -1,0 +1,11 @@
+{% if courses %}
+
+    <ul>
+        {% for course in courses %}
+            <li><a></a>{{ course.cid }}:{{ course.name }}</li>
+        {% endfor %}
+    </ul>
+
+{% else %}
+    <p>This user is interested in no courses.</p>
+{% endif %}

@@ -120,4 +120,14 @@ class BuyCourse(models.Model):
         unique_together = (('userID', 'cid'),)
 
     def __str__(self):
-        return self.userID.email+':'+self.cid.name
+        return self.userID.email + ':' + self.cid.name
+
+
+class Interested(models.Model):
+    userID = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID', primary_key=True)
+    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID')
+
+    class Meta:
+        managed = False
+        db_table = 'interested'
+        unique_together = (('userID', 'cid'),)
