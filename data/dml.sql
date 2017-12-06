@@ -1,4 +1,4 @@
--- osd@tom.com's pw is 4MTGfwAhiDIE 
+-- osd@tom.com's pw is 4MTGfwAhiDIE
 
 INSERT INTO User VALUES
 (1,'osd@tom.com','Reginald','Hearst','41d3b9edd498b6a66a0e951f25627825','94563.jpg','USA','Denver','2744 Davis Lane','80202'),

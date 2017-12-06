@@ -1,5 +1,7 @@
 import hashlib
 import datetime
+import random
+
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
@@ -239,8 +241,18 @@ def add_course(request, cid):
     try:
         BuyCourse.objects.get(userID=user, cid=course)
     except BuyCourse.DoesNotExist:
-        # TODO add course to DB
-        return HttpResponse("Wait")
+        buy = BuyCourse()
+        buy.userID=user
+        buy.cid=course
+        buy.buyTime = datetime.datetime.now()
+        # code is year+month+date+time+random number
+        code = buy.buyTime.strftime('%Y%m%d%H%m')
+        code += str(random.randint(100000,999999))
+        buy.code = code
+        buy.isComplete = 0
+        buy.rating = -1
+        buy.save()
+        return HttpResponse("Done!")
     else:
         return HttpResponse("You have already bought it!")
 
