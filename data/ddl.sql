@@ -3,11 +3,13 @@
 This DDL is for MySQL
 */
 
+/*
 drop table QuizQuestion, Quiz, Post, Link, Downloadable,
 Contain, PlayList, LikeQuestion, Related, Answer, 
 Question, CompleteMaterial, CourseMaterial, Interested,
 BuyCourse, CreateCourse, SecondaryTopic, Course, Topic,
 AdminPosition, Faculty, Admin, Phone, User;
+*/
 
 CREATE TABLE User (
   UserID INT AUTO_INCREMENT,

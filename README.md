@@ -52,8 +52,43 @@ YinXiang Wang
 
 ## How to install our project
 ### Requirements
-- [Anaconda for Python 3.6 version](https://www.anaconda.com/download/) My version is 4.3.21
-- Django My version is 1.11.6
-- [XAMPP using PHP5](https://www.apachefriends.org/download.html) My version XAMPP for Windows 5.6.32
+- [Anaconda for Python 3.6 version](https://www.anaconda.com/download/), My version is 4.3.21
+- Django, My version is 1.11.6
+- [XAMPP using PHP5](https://www.apachefriends.org/download.html), My version XAMPP for Windows 5.6.32
 ### Environment
-I do all works at Windows10 and make sure it can run following the instruction. Sorry for I do not have a mac or linux to test, but since I only use Anaconda and XAMPP which are all have distribution for MacOS and Linux, and add Django package via pip, I believe it also can run through the steps.
+I do all works at Windows10 and make sure it can run following the instruction. Sorry for I do not have a mac or linux to test, but since I only use Anaconda and XAMPP which all have distribution for MacOS and Linux, and add Django package via pip, I believe it also can run through the steps.
+### Steps
+1. Install XAMPP
+2. Install Anaconda
+Because it is just download and click the exe file, so I do not speak to much.
+3. Clone or just download ZIP and unzip this project at your computer.
+4. Open XAMPP and start MySQL. Login as root
+```
+mysql -u root
+```
+5. My database name is project10
+```
+create database project10;
+use project10;
+```
+6. Using DDL and DML
+The file's path is [Project_Folder_Path]\data\ddl.sql and [Project_Folder_Path]\data\dml.sql
+```
+\. [Project_Folder_Path]\data\ddl.sql
+\. [Project_Folder_Path]\data\dml.sql
+```
+7. Open Anaconda prompt and install Django
+```
+pip install django
+```
+8. Done! Now start our project.
+Open Anaconda prompt and change folder to [Project_Folder_Path]\WebSite\
+```
+python manage.py runserver
+```
+You can go to http://127.0.0.1:8000/trainly to see our project!
+
+## Vedios
+You can follow the vedio to see how to install our project. But make sure you have already installed XAMPP and Anaconda.
+
+This vedio is a demo for all project's features.
