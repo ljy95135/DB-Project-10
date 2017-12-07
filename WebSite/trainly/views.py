@@ -56,7 +56,7 @@ def register(request):
             user.lastName = uf.cleaned_data['lastName']
 
             after_salt = uf.cleaned_data['pw'] + user.email
-            after_salt.encode('utf-8')
+            after_salt = after_salt.encode('utf-8')
             md5 = hashlib.md5()
             md5.update(after_salt)
             user.pw = md5.hexdigest()
