@@ -27,9 +27,6 @@ class Answer(models.Model):
         unique_together = (('userid', 'qid'),)
 
 
-
-
-
 class Contain(models.Model):
     userid = models.ForeignKey('Playlist', models.DO_NOTHING, db_column='UserID')  # Field name made lowercase.
     name = models.ForeignKey('Playlist', models.DO_NOTHING, db_column='Name')  # Field name made lowercase.
@@ -39,9 +36,6 @@ class Contain(models.Model):
         managed = False
         db_table = 'contain'
         unique_together = (('userid', 'name', 'cmid'),)
-
-
-
 
 
 class Createcourse(models.Model):

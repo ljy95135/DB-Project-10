@@ -2,9 +2,12 @@
 
     <ul>
         {% for course in courses %}
-            <li><a href="{% url 'trainly:courses_page' course.cid%}">{{ course.cid }}:{{ course.name }}</a> Get Your certification.</li>
+            <li><a href="{% url 'trainly:courses_page' course.cid %}">{{ course.cid }}:{{ course.name }}</a>
+                <a style="color: orangered" href="{% url 'trainly:certification' course.cid %}">Get Your
+                    certification.</a></li>
         {% endfor %}
     </ul>
+    <p>You can print your certification as long as you finish them!</p>
 
 {% else %}
     <p>For this user, no Courses are completed.</p>

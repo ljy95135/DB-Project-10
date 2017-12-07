@@ -21,5 +21,5 @@ urlpatterns = \
         url(r'^interested_courses/(?P<uid>[0-9]+)$', views.interested_courses, name='interested_courses'),
         url(r'^enrolled_courses/(?P<uid>[0-9]+)$', views.enrolled_courses, name='enrolled_courses'),
         url(r'^learn_material/(?P<cmid>[0-9]+)$', views.learn_material, name='learn_material'),
-        
+        url(r'^certification/(?P<cid>[0-9]+)$', views.certification, name='certification')
     ]

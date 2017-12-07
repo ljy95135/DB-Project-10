@@ -13,6 +13,8 @@ from .models import User, Admin, Faculty, Course, BuyCourse, Interested, Seconda
 
 from django import forms
 
+month_list = [None, 'Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.']
+
 
 class UserForm(forms.Form):
     firstName = forms.CharField(label='First Name', max_length=50)
@@ -267,7 +269,7 @@ def enrolled_courses(request, uid):
         return HttpResponse('No such User')
 
     courses = [bc.cid for bc in BuyCourse.objects.filter(userID=user)]
-    # no rates availabe now
+    # no rates available now
     # courses = sorted(courses, key=lambda x: x.avgRate)
     context = {'courses': courses}
     return render(request, 'trainly/enrolled_courses.html', context)
@@ -279,7 +281,7 @@ def completed_courses(request, uid):
     except User.DoesNotExist:
         return HttpResponse('No such User')
     courses = [bc.cid for bc in BuyCourse.objects.filter(userID=user, isComplete=1)]
-    # no rates availabe now
+    # no rates available now
     # courses = sorted(courses, key=lambda x: x.avgRate)
     context = {'courses': courses}
 
@@ -376,4 +378,29 @@ def learn_material(request, cmid):
         bc.save(update_fields=('isComplete', 'completeTime'))
         return HttpResponse("You learn the material, you also finish the course!")
 
-# TODO one finish can get a certification
+
+def certification(request, cid):
+    user_id = request.COOKIES.get('user_id', None)
+    if user_id is None:
+        return HttpResponse("Please login first")
+    user = User.objects.get(pk=user_id)
+
+    try:
+        course = Course.objects.get(pk=cid)
+    except Course.DoesNotExist:
+        return HttpResponse("No such Course")
+
+    try:
+        bc = BuyCourse.objects.get(userID=user, cid=course)
+    except BuyCourse.DoesNotExist:
+        return HttpResponse("You are not enrolled in this course.")
+
+    if bc.isComplete != 1:
+        return HttpResponse("Please finish it first.")
+
+    month = bc.completeTime.date().strftime('%m')
+    month_name = month_list[int(month)]
+    day_year_name = bc.completeTime.date().strftime(', %d, %Y')
+
+    context = {'user': user, 'time': month_name + day_year_name, 'course': bc.cid.name}
+    return render(request, 'trainly/certification.html', context)
