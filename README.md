@@ -88,7 +88,17 @@ python manage.py runserver
 ```
 You can go to http://127.0.0.1:8000/trainly to see our project!
 
+9. Buy the way, if you want to use Django's admin site
+```
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py createsuperuser
+```
+Then you can go to http://127.0.0.1:8000/admin/trainly/ to just see the data!
+
 ## Vedios
 You can follow the vedio to see how to install our project. But make sure you have already installed XAMPP and Anaconda.
-
+https://youtu.be/2OBiF0L3slM
 This vedio is a demo for all project's features.
+https://youtu.be/GPNmD1XRcmI
