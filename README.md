@@ -29,7 +29,7 @@ YinXiang Wang
 - finished the description pdf in milestone1
 - modified the description as the professor instructed in milestone2
 - finished the whole DML in milestone2
-- completed abstract for reprot.pdf
+- completed abstract and description for reprot.pdf
 
 ### Wandong Wu
 - changed the logical based on ERD in milestone2.
@@ -38,7 +38,6 @@ YinXiang Wang
 
 ### YinXiang Wang
 - wrote SQL command for 4 complex reports in milestone2.
-- completed description for reprot.pdf
 
 ### Together
 - discussed how to implemented the ERD in milestone1
