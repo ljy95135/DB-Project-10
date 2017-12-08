@@ -31,7 +31,7 @@ class User(models.Model):
 
 
 class Admin(models.Model):
-    userID = models.ForeignKey('User', db_column='UserID', primary_key=True)
+    userID = models.ForeignKey('User', db_column='UserID', primary_key=True, on_delete=models.CASCADE)
     grantAdmin = models.ForeignKey('self', models.DO_NOTHING, db_column='GrantAdmin')
     grantTime = models.DateTimeField(db_column='GrantTime')
 
@@ -44,7 +44,7 @@ class Admin(models.Model):
 
 
 class Faculty(models.Model):
-    userID = models.ForeignKey('User', db_column='UserID', primary_key=True)
+    userID = models.ForeignKey('User', db_column='UserID', primary_key=True, on_delete=models.CASCADE)
     website = models.CharField(db_column='Website', max_length=200)
     affiliation = models.CharField(db_column='Affiliation', max_length=50)
     title = models.CharField(db_column='Title', max_length=300)
@@ -156,4 +156,4 @@ class CompleteMaterial(models.Model):
         unique_together = (('cmid', 'userID'),)
 
     def __str__(self):
-        return self.cmid.name+" by "+self.userID.__str__()
+        return self.cmid.name + " by " + self.userID.__str__()
