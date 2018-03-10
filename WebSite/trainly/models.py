@@ -32,7 +32,7 @@ class User(models.Model):
 
 class Admin(models.Model):
     userID = models.ForeignKey('User', db_column='UserID', primary_key=True, on_delete=models.CASCADE)
-    grantAdmin = models.ForeignKey('self', models.DO_NOTHING, db_column='GrantAdmin')
+    grantAdmin = models.ForeignKey('self', db_column='GrantAdmin')
     grantTime = models.DateTimeField(db_column='GrantTime')
 
     class Meta:
@@ -48,7 +48,7 @@ class Faculty(models.Model):
     website = models.CharField(db_column='Website', max_length=200)
     affiliation = models.CharField(db_column='Affiliation', max_length=50)
     title = models.CharField(db_column='Title', max_length=300)
-    grantAdmin = models.ForeignKey(Admin, models.DO_NOTHING, db_column='GrantAdmin')
+    grantAdmin = models.ForeignKey(Admin, db_column='GrantAdmin')
     grantTime = models.DateTimeField(db_column='GrantTime')
 
     class Meta:
@@ -66,7 +66,7 @@ class Course(models.Model):
     icon = models.TextField(db_column='Icon')
     date = models.DateTimeField(db_column='Date')
     cost = models.IntegerField(db_column='Cost')
-    primaryTopic = models.ForeignKey('Topic', models.DO_NOTHING, db_column='PrimaryTopic')
+    primaryTopic = models.ForeignKey('Topic', db_column='PrimaryTopic')
     enrollNumber = models.IntegerField(db_column='EnrollNumber', blank=True, null=True)
     avgRate = models.IntegerField(db_column='AvgRate', blank=True, null=True)
 
@@ -91,8 +91,8 @@ class Topic(models.Model):
 
 
 class Secondarytopic(models.Model):
-    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID', primary_key=True)  # Field name made lowercase.
-    tid = models.ForeignKey('Topic', models.DO_NOTHING, db_column='TID')  # Field name made lowercase.
+    cid = models.ForeignKey(Course, db_column='CID', primary_key=True)  # Field name made lowercase.
+    tid = models.ForeignKey('Topic', db_column='TID')  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -104,9 +104,9 @@ class Secondarytopic(models.Model):
 
 
 class BuyCourse(models.Model):
-    userID = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID',
+    userID = models.ForeignKey('User', db_column='UserID',
                                primary_key=True)
-    cid = models.ForeignKey('Course', models.DO_NOTHING, db_column='CID')
+    cid = models.ForeignKey('Course', db_column='CID')
     buyTime = models.DateTimeField(db_column='BuyTime')
     code = models.CharField(db_column='Code', max_length=100)
     isComplete = models.IntegerField(db_column='IsComplete')
@@ -124,8 +124,8 @@ class BuyCourse(models.Model):
 
 
 class Interested(models.Model):
-    userID = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID', primary_key=True)
-    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID')
+    userID = models.ForeignKey('User', db_column='UserID', primary_key=True)
+    cid = models.ForeignKey(Course, db_column='CID')
 
     class Meta:
         managed = False
@@ -135,7 +135,7 @@ class Interested(models.Model):
 
 class Coursematerial(models.Model):
     cmid = models.AutoField(db_column='CMID', primary_key=True)
-    cid = models.ForeignKey(Course, models.DO_NOTHING, db_column='CID')
+    cid = models.ForeignKey(Course, db_column='CID')
     name = models.CharField(db_column='Name', max_length=100)
 
     class Meta:
@@ -145,9 +145,9 @@ class Coursematerial(models.Model):
 
 
 class CompleteMaterial(models.Model):
-    cmid = models.ForeignKey('Coursematerial', models.DO_NOTHING, db_column='CMID',
+    cmid = models.ForeignKey('Coursematerial', db_column='CMID',
                              primary_key=True)  # Field name made lowercase.
-    userID = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID')  # Field name made lowercase.
+    userID = models.ForeignKey('User', db_column='UserID')  # Field name made lowercase.
     completeTime = models.DateTimeField(db_column='CompleteTime')  # Field name made lowercase.
 
     class Meta:
@@ -157,3 +157,5 @@ class CompleteMaterial(models.Model):
 
     def __str__(self):
         return self.cmid.name + " by " + self.userID.__str__()
+
+
